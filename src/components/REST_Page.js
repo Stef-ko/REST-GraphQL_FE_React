@@ -13,6 +13,7 @@ import RESTPost from './REST_Post'
 import RESTPostForm from './REST_PostForm'
 import RESTRequestAccordion from './REST_RequestAccordion'
 import { Context } from '../Store/REST_Request_Store'
+import { RESTURI } from '../http-common'
 
 function REST() {
   const [restposts, setPosts] = useState([])
@@ -37,7 +38,7 @@ function REST() {
           payload: {
             Request: 'Get Posts',
             RequestMethod: 'GET',
-            RequestURL: 'http://localhost:8080/api/posts',
+            RequestURL: RESTURI,
             RequestBody: '',
             //TODO Fix calculation of Size to be exact or read it from the header
             RequestSize: (JSON.stringify(res).length * 16) / 8 / 1024 / 2,
