@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from 'react'
 
 import {
   Container,
@@ -6,65 +6,65 @@ import {
   Grid,
   Grow,
   CircularProgress,
-} from "@material-ui/core";
+} from '@material-ui/core'
 
-import httpRestService from "../services/httpRest.service";
-import RESTPost from "./REST_Post";
-import RESTPostForm from "./REST_PostForm";
-import RESTRequestAccordion from "./REST_RequestAccordion";
-import { Context } from "../Store/REST_Request_Store";
+import httpRestService from '../services/httpRest.service'
+import RESTPost from './REST_Post'
+import RESTPostForm from './REST_PostForm'
+import RESTRequestAccordion from './REST_RequestAccordion'
+import { Context } from '../Store/REST_Request_Store'
 
 function REST() {
-  const [restposts, setPosts] = useState([]);
+  const [restposts, setPosts] = useState([])
 
-  const [, dispatch] = useContext(Context);
+  const [, dispatch] = useContext(Context)
 
   useEffect(() => {
-    retrievePosts();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    retrievePosts()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const retrievePosts = () => {
-    var start = performance.now();
+    var start = performance.now()
 
     httpRestService
       .getAll()
       .then((res) => {
-        var time = performance.now();
-        setPosts(res.data);
+        var time = performance.now()
+        setPosts(res.data)
         dispatch({
-          type: "Add_REST_REQUEST",
+          type: 'Add_REST_REQUEST',
           payload: {
-            Request: "Get Posts",
-            RequestMethod: "GET",
-            RequestURL: "http://localhost:8080/api/posts",
-            RequestBody: "",
+            Request: 'Get Posts',
+            RequestMethod: 'GET',
+            RequestURL: 'http://localhost:8080/api/posts',
+            RequestBody: '',
             //TODO Fix calculation of Size to be exact or read it from the header
             RequestSize: (JSON.stringify(res).length * 16) / 8 / 1024 / 2,
             RequestExecutionTime: time - start,
             Response: JSON.stringify(res, null, 2),
           },
-        });
+        })
       })
       .catch((e) => {
-        console.log(e);
-      });
-  };
+        console.log(e)
+      })
+  }
 
   const createcallbackFunction = (RESTPostNew) => {
-    setPosts([RESTPostNew.data, ...restposts]);
-  };
+    setPosts([RESTPostNew.data, ...restposts])
+  }
 
   const deleteCallbackFunction = (postId) => {
-    setPosts([...restposts.filter((p) => p._id !== postId)]);
-  };
+    setPosts([...restposts.filter((p) => p._id !== postId)])
+  }
 
   return (
-    <Container maxWidth='md'>
+    <Container maxWidth="md">
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <h1>REST</h1>
-          {restposts ? (
+          {restposts.length !== 0 ? (
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper>
@@ -76,7 +76,7 @@ function REST() {
                 <Grid key={restpost.createdAt} item xs={12}>
                   <Grow
                     in={true}
-                    style={{ transformOrigin: "0 0 0" }}
+                    style={{ transformOrigin: '0 0 0' }}
                     timeout={800}
                   >
                     <Paper elevation={2}>
@@ -99,7 +99,7 @@ function REST() {
         </Grid>
       </Grid>
     </Container>
-  );
+  )
 }
 
-export default REST;
+export default REST
