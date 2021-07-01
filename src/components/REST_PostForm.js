@@ -86,9 +86,13 @@ function RESTPostForm({ parentCallback }) {
   return (
     <Card className={classes.root}>
       <CardHeader
-        avatar={<Avatar aria-label="recipe">S</Avatar>}
-        title="User Name"
-        subheader=""
+        avatar={
+          <>
+            <Avatar aria-label="recipe"></Avatar>
+          </>
+        }
+        title={<TextField id="standard-basic" label="Your Name" />}
+        subheader="&nbsp;"
       />
       <CardContent>
         <form

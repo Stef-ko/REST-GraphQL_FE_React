@@ -41,7 +41,7 @@ const useStyles = makeStyles({
   },
 })
 
-function GraphQLPost({ post: { id, body, createdAt } }) {
+function GraphQLPost({ post: { id, username, body, createdAt } }) {
   const [editMode, setEditMode] = useState(false)
   const [postBody, setPostBody] = useState(body)
 
@@ -97,10 +97,10 @@ function GraphQLPost({ post: { id, body, createdAt } }) {
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            S
+            {username.charAt(0)}
           </Avatar>
         }
-        title="User Name"
+        title={username}
         subheader={moment(createdAt).fromNow()}
       />
       <CardContent>
