@@ -37,13 +37,15 @@ function RESTPostForm({ parentCallback }) {
 
   const classes = useStyles()
   const [postBody, setPostBody] = useState()
+  const [username, setusername] = useState()
   const [inputFocused, setInputFocus] = useState()
 
   const [createPostResult, setCreatePostResult] = useState('')
 
+  console.log(username)
   const createPost = () => {
     httpRestService
-      .create(postBody)
+      .create({ postBody, username })
       .then((res) => {
         parentCallback(res)
         setCreatePostResult(() => JSON.stringify(res, null, 2))
@@ -77,6 +79,7 @@ function RESTPostForm({ parentCallback }) {
     e.preventDefault()
     createPost()
     setPostBody('')
+    setusername('')
     //TODO reset Textfield after post was submitted
     // console.log(postBody);
     setInputFocus(false)
@@ -84,18 +87,30 @@ function RESTPostForm({ parentCallback }) {
   }
 
   return (
-    <Card className={classes.root}>
-      <CardHeader
-        avatar={<Avatar aria-label="recipe"></Avatar>}
-        title="User Name"
-        subheader=""
-      />
-      <CardContent>
-        <form
-          onSubmit={(e) => {
-            handleSubmit(e)
-          }}
-        >
+    <form
+      onSubmit={(e) => {
+        handleSubmit(e)
+      }}
+    >
+      <Card className={classes.root}>
+        <CardHeader
+          avatar={
+            <>
+              <Avatar aria-label="recipe"></Avatar>
+            </>
+          }
+          title={
+            <TextField
+              id="standard-basic"
+              label="Your Name"
+              value={username}
+              required
+              onChange={(e) => setusername(e.target.value)}
+            />
+          }
+          subheader="&nbsp;"
+        />
+        <CardContent>
           <FormControl fullWidth>
             <TextField
               id="outlined-multiline-static"
@@ -121,9 +136,9 @@ function RESTPostForm({ parentCallback }) {
               </Button>
             </CardActions>
           </FormControl>
-        </form>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </form>
   )
 }
 

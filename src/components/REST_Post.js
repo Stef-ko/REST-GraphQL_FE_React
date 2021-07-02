@@ -40,7 +40,10 @@ const useStyles = makeStyles({
   },
 })
 
-function RESTPost({ parentCallback, restpost: { _id, body, createdAt } }) {
+function RESTPost({
+  parentCallback,
+  restpost: { _id, username, body, createdAt },
+}) {
   const [editMode, setEditMode] = useState(false)
   const [postBody, setPostBody] = useState(body)
 
@@ -94,10 +97,10 @@ function RESTPost({ parentCallback, restpost: { _id, body, createdAt } }) {
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            S
+            {username.charAt(0)}
           </Avatar>
         }
-        title="User Name"
+        title={username}
         subheader={moment(createdAt).fromNow()}
       />
       <CardContent>
