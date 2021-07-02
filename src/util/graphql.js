@@ -1,15 +1,16 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const FETCH_POSTS_QUERY = gql`
   {
     getPosts {
       id
+      username
       body
       createdAt
     }
   }
-`;
-export default FETCH_POSTS_QUERY;
+`
+export default FETCH_POSTS_QUERY
 
 // export const CREATE_POST_MUTATION = gql`
 //   mutation createPost($body: String!) {

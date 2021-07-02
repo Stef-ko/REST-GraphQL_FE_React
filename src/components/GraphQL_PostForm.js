@@ -8,7 +8,7 @@ import CardActions from '@material-ui/core/CardActions'
 import FormControl from '@material-ui/core/FormControl'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { TextField } from '@material-ui/core'
+import { Grid, TextField } from '@material-ui/core'
 import { gql, useMutation } from '@apollo/client'
 
 import FETCH_POSTS_QUERY from '../util/graphql'
@@ -38,12 +38,13 @@ function GraphQLPostForm() {
 
   const classes = useStyles()
   const [postBody, setPostBody] = useState()
+  const [username, setusername] = useState()
   const [inputFocused, setInputFocus] = useState()
 
   const [createPostResult, setCreatePostResult] = useState()
 
   const [createPost] = useMutation(CREATE_POST_MUTATION, {
-    variables: { body: postBody },
+    variables: { body: postBody, username: username },
     update(proxy, result) {
       const data = proxy.readQuery({ query: FETCH_POSTS_QUERY })
       proxy.writeQuery({
@@ -53,11 +54,13 @@ function GraphQLPostForm() {
       setCreatePostResult(() => JSON.stringify(result, null, 2))
     },
   })
+  console.log(username)
 
   const handleSubmit = (e) => {
     e.preventDefault()
     createPost()
     setPostBody('')
+    setusername('')
     //TODO reset Textfield after post was submitted
     setInputFocus(false)
     // setInputFocus({ postBody } === "" ? true : false);
@@ -83,22 +86,34 @@ function GraphQLPostForm() {
   }, [createPostResult])
 
   return (
-    <Card className={classes.root}>
-      <CardHeader
-        avatar={<Avatar aria-label="recipe">S</Avatar>}
-        title="User Name"
-        subheader=""
-      />
-      <CardContent>
-        <form
-          onSubmit={(e) => {
-            handleSubmit(e)
-          }}
-        >
+    <form
+      onSubmit={(e) => {
+        handleSubmit(e)
+      }}
+    >
+      <Card className={classes.root}>
+        <CardHeader
+          avatar={
+            <>
+              <Avatar aria-label="recipe"></Avatar>
+            </>
+          }
+          title={
+            <TextField
+              id="standard-basic"
+              label="Your Name"
+              value={username}
+              required
+              onChange={(e) => setusername(e.target.value)}
+            />
+          }
+          subheader="&nbsp;"
+        />
+        <CardContent>
           <FormControl fullWidth>
             <TextField
               id="outlined-multiline-static"
-              label="New Post"
+              label="Write something..."
               multiline
               rows={4}
               fullWidth
@@ -120,15 +135,15 @@ function GraphQLPostForm() {
               </Button>
             </CardActions>
           </FormControl>
-        </form>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </form>
   )
 }
 
 const CREATE_POST_MUTATION = gql`
-  mutation createPost($body: String!) {
-    createPost(body: $body) {
+  mutation createPost($body: String!, $username: String!) {
+    createPost(body: $body, username: $username) {
       id
       body
       createdAt
