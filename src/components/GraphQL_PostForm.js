@@ -145,6 +145,7 @@ const CREATE_POST_MUTATION = gql`
   mutation createPost($body: String!, $username: String!) {
     createPost(body: $body, username: $username) {
       id
+      username
       body
       createdAt
     }
