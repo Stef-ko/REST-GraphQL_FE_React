@@ -8,7 +8,7 @@ import CardActions from '@material-ui/core/CardActions'
 import FormControl from '@material-ui/core/FormControl'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { Grid, TextField } from '@material-ui/core'
+import { TextField } from '@material-ui/core'
 import { gql, useMutation } from '@apollo/client'
 
 import FETCH_POSTS_QUERY from '../util/graphql'
