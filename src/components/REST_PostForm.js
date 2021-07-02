@@ -86,7 +86,7 @@ function RESTPostForm({ parentCallback }) {
   return (
     <Card className={classes.root}>
       <CardHeader
-        avatar={<Avatar aria-label="recipe">S</Avatar>}
+        avatar={<Avatar aria-label="recipe"></Avatar>}
         title="User Name"
         subheader=""
       />
