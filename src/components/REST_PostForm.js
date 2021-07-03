@@ -114,7 +114,7 @@ function RESTPostForm({ parentCallback }) {
           <FormControl fullWidth>
             <TextField
               id="outlined-multiline-static"
-              label="New Post"
+              label="Write something..."
               multiline
               rows={4}
               fullWidth
