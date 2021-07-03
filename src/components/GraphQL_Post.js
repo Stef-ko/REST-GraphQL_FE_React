@@ -12,6 +12,7 @@ import {
   Button,
   TextField,
   Grow,
+  Tooltip,
 } from '@material-ui/core'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import CommentIcon from '@material-ui/icons/Comment'
@@ -103,68 +104,88 @@ function GraphQLPost({ post: { id, username, body, createdAt } }) {
         title={username}
         subheader={moment(createdAt).fromNow()}
       />
-      <CardContent>
-        {editMode ? (
-          <Grow in={true} style={{ transformOrigin: '0 0 0' }} timeout={800}>
-            <form
-              onSubmit={(e) => {
-                handleSave(e)
-              }}
-            >
-              <FormControl fullWidth>
-                <TextField
-                  id="standard-basic"
-                  label="Edit Post"
-                  rows={4}
-                  fullWidth
-                  variant="outlined"
-                  name="postBody"
-                  required
-                  value={postBody}
-                  // autoFocus={inputFocused}
-                  onChange={(e) => setPostBody(e.target.value)}
-                />
-                <CardActions>
-                  <Button
-                    type="submit"
-                    value="SubmitPost"
-                    variant="contained"
-                    color="secondary"
-                  >
-                    Save
-                  </Button>
-                </CardActions>
-              </FormControl>
-            </form>
-          </Grow>
-        ) : (
-          <Typography variant="body2" component="p">
-            {postBody}
-          </Typography>
-        )}
-      </CardContent>
-      <CardActions>
-        {editMode ? (
-          <></>
-        ) : (
-          <>
-            <IconButton color="secondary" aria-label="like post" disabled>
-              <FavoriteBorderIcon />
-            </IconButton>
-            <IconButton color="secondary" aria-label="like post" disabled>
-              <CommentIcon />
-            </IconButton>
+      {editMode ? (
+        <>
+          <form
+            onSubmit={(e) => {
+              handleSave(e)
+            }}
+          >
+            <CardContent>
+              <Grow
+                in={true}
+                style={{ transformOrigin: '0 0 0' }}
+                timeout={800}
+              >
+                <FormControl fullWidth>
+                  <TextField
+                    id="standard-basic"
+                    label="Edit Post"
+                    rows={4}
+                    fullWidth
+                    variant="outlined"
+                    name="postBody"
+                    required
+                    value={postBody}
+                    onChange={(e) => setPostBody(e.target.value)}
+                  />
+                </FormControl>
+              </Grow>
+            </CardContent>
+            <CardActions>
+              <Button
+                type="submit"
+                value="SubmitPost"
+                variant="contained"
+                color="secondary"
+              >
+                Save
+              </Button>
+              <Button
+                onClick={() => setEditMode(!editMode)}
+                variant="contained"
+                color="primary"
+              >
+                Cancel
+              </Button>
+            </CardActions>
+          </form>
+        </>
+      ) : (
+        <>
+          <CardContent>
+            <Typography variant="body2" component="p">
+              {postBody}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Tooltip title="Not implemented" arrow>
+              <span>
+                <IconButton color="secondary" aria-label="like post" disabled>
+                  <FavoriteBorderIcon />
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Tooltip title="Not implemented" arrow>
+              <span>
+                <IconButton color="secondary" aria-label="like post" disabled>
+                  <CommentIcon />
+                </IconButton>
+              </span>
+            </Tooltip>
             <GraphQLDeleteButton postId={id} />
-          </>
-        )}
-        <IconButton
-          color="secondary"
-          aria-label="edit post"
-          onClick={() => setEditMode(!editMode)}
-        >
-          <EditIcon color={editMode ? 'disabled' : 'action'} />
-        </IconButton>
-      </CardActions>
+            <Tooltip title="Edit" arrow>
+              <IconButton
+                color="secondary"
+                aria-label="edit post"
+                onClick={() => setEditMode(!editMode)}
+              >
+                <EditIcon color="action" />
+              </IconButton>
+            </Tooltip>
+          </CardActions>
+        </>
+      )}
     </Card>
   )
 }

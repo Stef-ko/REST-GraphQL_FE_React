@@ -1,5 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { IconButton, makeStyles } from '@material-ui/core'
+import {
+  Backdrop,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  makeStyles,
+  Tooltip,
+} from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import httpRestService from '../services/httpRest.service'
 import { Context } from '../Store/REST_Request_Store'
@@ -15,6 +26,8 @@ function DeleteButton({ postId, parentCallback }) {
 
   const [, dispatch] = useContext(Context)
   const [deletePostResult, setDeletePostResult] = useState()
+
+  const [open, setOpen] = useState(false)
 
   const deletePost = () => {
     httpRestService
@@ -47,17 +60,52 @@ function DeleteButton({ postId, parentCallback }) {
     }
   })
 
+  const handleClose = () => {
+    setOpen(false)
+  }
+  const handleToggle = () => {
+    setOpen(!open)
+  }
+
   const classes = useStyles()
+
   return (
-    <IconButton
-      variant="outlined"
-      color="secondary"
-      aria-label="delete post"
-      className={classes.DeleteButton}
-      onClick={deletePost}
-    >
-      <DeleteIcon />
-    </IconButton>
+    <>
+      <Tooltip title="Delete" arrow>
+        <IconButton
+          variant="outlined"
+          color="secondary"
+          aria-label="delete post"
+          className={classes.DeleteButton}
+          onClick={handleToggle}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
+      <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            Do you really want to delete this post?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description"></DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={deletePost} color="primary" autoFocus>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Backdrop>
+    </>
   )
 }
 
