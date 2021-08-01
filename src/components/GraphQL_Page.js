@@ -24,7 +24,7 @@ function GraphQL() {
   var start = performance.now()
   const { data: { getPosts: posts } = {} } = useQuery(FETCH_POSTS_QUERY)
   var time = performance.now()
-  console.log(time - start)
+  // console.log(time - start)
 
   // Workaround, to avoid getting displayed a new Request Accordion for every change on posts
   const [initiallyLoaded, setInitiallyLoaded] = useState(false)
