@@ -34,7 +34,6 @@ function REST() {
 
   const retrievePosts = () => {
     var start = performance.now()
-
     httpRestService
       .getAll()
       .then((res) => {

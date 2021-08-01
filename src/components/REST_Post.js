@@ -47,15 +47,18 @@ function RESTPost({
 }) {
   const [editMode, setEditMode] = useState(false)
   const [postBody, setPostBody] = useState(body)
+  const [tmpPostBody, setTmpPostBody] = useState(body)
 
   const [, dispatch] = useContext(Context)
   const [updatePostResult, setUpdatePostResult] = useState()
+
+  const [executiontimeUpdate, setExecutiontimeUpdate] = useState()
 
   const classes = useStyles()
 
   const handleSave = (e) => {
     e.preventDefault()
-    // updatePost();
+    setPostBody(tmpPostBody)
     setEditMode(false)
   }
 
@@ -64,9 +67,12 @@ function RESTPost({
   }
 
   const updatePost = () => {
+    var start = performance.now()
     httpRestService
-      .update(_id, postBody)
+      .update(_id, tmpPostBody)
       .then((res) => {
+        var time = performance.now()
+        setExecutiontimeUpdate(time - start)
         setUpdatePostResult(JSON.stringify(res, null, 2))
       })
       .catch((e) => {
@@ -86,6 +92,7 @@ function RESTPost({
           //TODO Fix calculation of Size to be exact or read it from the header
           RequestSize:
             (JSON.stringify(updatePostResult).length * 16) / 8 / 1024 / 2,
+          RequestExecutionTime: executiontimeUpdate,
           Response: updatePostResult,
         },
       })
@@ -126,8 +133,8 @@ function RESTPost({
                     variant="outlined"
                     name="postBody"
                     required
-                    value={postBody}
-                    onChange={(e) => setPostBody(e.target.value)}
+                    value={tmpPostBody}
+                    onChange={(e) => setTmpPostBody(e.target.value)}
                   />
                 </FormControl>
               </Grow>
@@ -143,7 +150,11 @@ function RESTPost({
                 Save
               </Button>
               <Button
-                onClick={() => setEditMode(!editMode)}
+                onClick={() => {
+                  setEditMode(!editMode)
+                  setPostBody(body)
+                  setTmpPostBody(body)
+                }}
                 variant="contained"
                 color="secondary"
               >

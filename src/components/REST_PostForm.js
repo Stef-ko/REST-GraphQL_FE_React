@@ -42,10 +42,15 @@ function RESTPostForm({ parentCallback }) {
 
   const [createPostResult, setCreatePostResult] = useState('')
 
+  const [executiontimeUpdate, setExecutiontimeUpdate] = useState()
+
   const createPost = () => {
+    var start = performance.now()
     httpRestService
       .create({ postBody, username })
       .then((res) => {
+        var time = performance.now()
+        setExecutiontimeUpdate(time - start)
         parentCallback(res)
         setCreatePostResult(() => JSON.stringify(res, null, 2))
       })
@@ -66,6 +71,7 @@ function RESTPostForm({ parentCallback }) {
           //TODO Fix calculation of Size to be exact or read it from the header
           RequestSize:
             (JSON.stringify(createPostResult).length * 16) / 8 / 1024 / 2,
+          RequestExecutionTime: executiontimeUpdate,
           Response: createPostResult,
         },
       })
