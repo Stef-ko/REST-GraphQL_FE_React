@@ -35,7 +35,9 @@ function GraphQLDeleteButton({ postId }) {
 
   const [open, setOpen] = useState(false)
 
-  const [deletePost] = useMutation(DELETE_POST_MUTATION, {
+  const [executiontimeDelete, setExecutiontimeDelete] = useState()
+
+  const [deleteGraphQLPost] = useMutation(DELETE_POST_MUTATION, {
     variables: { postId: postId },
     update(proxy, result) {
       const data = proxy.readQuery({
@@ -51,6 +53,14 @@ function GraphQLDeleteButton({ postId }) {
     },
   })
 
+  //Workaround to measure execution time
+  const deletePost = () => {
+    var start = performance.now()
+    deleteGraphQLPost()
+    var time = performance.now()
+    setExecutiontimeDelete(time - start)
+  }
+
   useEffect(() => {
     if (deletePostResult) {
       dispatch({
@@ -63,6 +73,7 @@ function GraphQLDeleteButton({ postId }) {
           //TODO Fix calculation of Size to be exact or read it from the header
           RequestSize:
             (JSON.stringify(deletePostResult).length * 16) / 8 / 1024 / 2,
+          RequestExecutionTime: executiontimeDelete,
           Response: deletePostResult,
         },
       })
