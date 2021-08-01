@@ -6,6 +6,7 @@ import {
   Grid,
   CircularProgress,
   Grow,
+  Tooltip,
 } from '@material-ui/core'
 
 import GraphQLPost from './GraphQL_Post'
@@ -28,6 +29,15 @@ function GraphQL() {
 
   // Workaround, to avoid getting displayed a new Request Accordion for every change on posts
   const [initiallyLoaded, setInitiallyLoaded] = useState(false)
+
+  const [showDelayTooltip, setshowDelayTooltip] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setshowDelayTooltip(true)
+    }, 4000)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     // gets called twice, only the second time the posts are fetched,
@@ -81,7 +91,14 @@ function GraphQL() {
               ))}
             </Grid>
           ) : (
-            <CircularProgress />
+            <Tooltip
+              title="Sorry for beeing slow. I am not getting paid."
+              arrow
+              placement="right"
+              open={showDelayTooltip}
+            >
+              <CircularProgress />
+            </Tooltip>
           )}
         </Grid>
         <Grid item xs={6}>
