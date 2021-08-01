@@ -42,7 +42,6 @@ function RESTPostForm({ parentCallback }) {
 
   const [createPostResult, setCreatePostResult] = useState('')
 
-  console.log(username)
   const createPost = () => {
     httpRestService
       .create({ postBody, username })

@@ -6,6 +6,7 @@ import {
   Grid,
   Grow,
   CircularProgress,
+  Tooltip,
 } from '@material-ui/core'
 
 import httpRestService from '../services/httpRest.service'
@@ -20,8 +21,14 @@ function REST() {
 
   const [, dispatch] = useContext(Context)
 
+  const [showDelayTooltip, setshowDelayTooltip] = useState(false)
+
   useEffect(() => {
     retrievePosts()
+
+    setTimeout(() => {
+      setshowDelayTooltip(true)
+    }, 4000)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -91,7 +98,14 @@ function REST() {
               ))}
             </Grid>
           ) : (
-            <CircularProgress />
+            <Tooltip
+              title="Sorry for beeing slow. I am not getting paid."
+              arrow
+              placement="right"
+              open={showDelayTooltip}
+            >
+              <CircularProgress />
+            </Tooltip>
           )}
         </Grid>
         <Grid item xs={6}>

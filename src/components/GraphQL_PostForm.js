@@ -54,7 +54,6 @@ function GraphQLPostForm() {
       setCreatePostResult(() => JSON.stringify(result, null, 2))
     },
   })
-  console.log(username)
 
   const handleSubmit = (e) => {
     e.preventDefault()
