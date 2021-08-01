@@ -27,12 +27,17 @@ function DeleteButton({ postId, parentCallback }) {
   const [, dispatch] = useContext(Context)
   const [deletePostResult, setDeletePostResult] = useState()
 
+  const [executiontimeDelete, setExecutiontimeDelete] = useState()
+
   const [open, setOpen] = useState(false)
 
   const deletePost = () => {
+    var start = performance.now()
     httpRestService
       .delete(`deletepost/${postId}`)
       .then((res) => {
+        var time = performance.now()
+        setExecutiontimeDelete(time - start)
         setDeletePostResult(() => JSON.stringify(res, null, 2))
         parentCallback(postId)
       })
@@ -54,6 +59,7 @@ function DeleteButton({ postId, parentCallback }) {
           //TODO Fix calculation of Size to be exact or read it from the header
           RequestSize:
             (JSON.stringify(deletePostResult).length * 16) / 8 / 1024 / 2,
+          RequestExecutionTime: executiontimeDelete,
           Response: deletePostResult,
         },
       })

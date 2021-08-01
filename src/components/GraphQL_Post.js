@@ -45,12 +45,15 @@ const useStyles = makeStyles({
 function GraphQLPost({ post: { id, username, body, createdAt } }) {
   const [editMode, setEditMode] = useState(false)
   const [postBody, setPostBody] = useState(body)
+  const [tmpPostBody, setTmpPostBody] = useState(body)
 
   const [, dispatch] = useContext(Context)
   const [updatePostResult, setUpdatePostResult] = useState()
 
-  const [updatePost] = useMutation(UPDATE_POST_MUTATION, {
-    variables: { postId: id, body: postBody },
+  const [executiontimeUpdate, setExecutiontimeUpdate] = useState()
+
+  const [updateGraphQLPost] = useMutation(UPDATE_POST_MUTATION, {
+    variables: { postId: id, body: tmpPostBody },
     update(proxy, result) {
       proxy.writeQuery({
         query: FETCH_POSTS_QUERY,
@@ -68,6 +71,14 @@ function GraphQLPost({ post: { id, username, body, createdAt } }) {
     },
   })
 
+  //Workaround to measure execution time
+  const updatePost = () => {
+    var start = performance.now()
+    updateGraphQLPost()
+    var time = performance.now()
+    setExecutiontimeUpdate(time - start)
+  }
+
   useEffect(() => {
     if (updatePostResult) {
       dispatch({
@@ -80,6 +91,7 @@ function GraphQLPost({ post: { id, username, body, createdAt } }) {
           //TODO Fix calculation of Size to be exact or read it from the header
           RequestSize:
             (JSON.stringify(updatePostResult).length * 16) / 8 / 1024 / 2,
+          RequestExecutionTime: executiontimeUpdate,
           Response: updatePostResult,
         },
       })
@@ -89,10 +101,12 @@ function GraphQLPost({ post: { id, username, body, createdAt } }) {
 
   const handleSave = (e) => {
     e.preventDefault()
-    updatePost()
+    setPostBody(tmpPostBody)
     setEditMode(false)
   }
+
   const classes = useStyles()
+
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -126,8 +140,8 @@ function GraphQLPost({ post: { id, username, body, createdAt } }) {
                     variant="outlined"
                     name="postBody"
                     required
-                    value={postBody}
-                    onChange={(e) => setPostBody(e.target.value)}
+                    value={tmpPostBody}
+                    onChange={(e) => setTmpPostBody(e.target.value)}
                   />
                 </FormControl>
               </Grow>
@@ -138,11 +152,16 @@ function GraphQLPost({ post: { id, username, body, createdAt } }) {
                 value="SubmitPost"
                 variant="contained"
                 color="secondary"
+                onClick={updatePost}
               >
                 Save
               </Button>
               <Button
-                onClick={() => setEditMode(!editMode)}
+                onClick={() => {
+                  setEditMode(!editMode)
+                  setPostBody(body)
+                  setTmpPostBody(body)
+                }}
                 variant="contained"
                 color="primary"
               >

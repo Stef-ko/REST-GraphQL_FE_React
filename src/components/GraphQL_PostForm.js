@@ -43,7 +43,9 @@ function GraphQLPostForm() {
 
   const [createPostResult, setCreatePostResult] = useState()
 
-  const [createPost] = useMutation(CREATE_POST_MUTATION, {
+  const [executiontimeAdd, setExecutiontimeAdd] = useState()
+
+  const [createGraphQLPost] = useMutation(CREATE_POST_MUTATION, {
     variables: { body: postBody, username: username },
     update(proxy, result) {
       const data = proxy.readQuery({ query: FETCH_POSTS_QUERY })
@@ -54,6 +56,14 @@ function GraphQLPostForm() {
       setCreatePostResult(() => JSON.stringify(result, null, 2))
     },
   })
+
+  //Workaround to measure execution time
+  const createPost = () => {
+    var start = performance.now()
+    createGraphQLPost()
+    var time = performance.now()
+    setExecutiontimeAdd(time - start)
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -77,6 +87,7 @@ function GraphQLPostForm() {
           //TODO Fix calculation of Size to be exact or read it from the header
           RequestSize:
             (JSON.stringify(createPostResult).length * 16) / 8 / 1024 / 2,
+          RequestExecutionTime: executiontimeAdd,
           Response: createPostResult,
         },
       })
