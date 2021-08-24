@@ -1,7 +1,12 @@
-This is the React Frontend for the REST-GraphQL Comparison.
+# Sample Service REST-GraphQL Frontend React
 
-The frontend can be accessed here: https://eager-northcutt-ae83d1.netlify.app/graphql
+This is the React Frontend for the sample service REST-GraphQL, which was created by Stefan Kränzle during his Bachelor Thesis.
 
-The Apollo Server for GraphQL is hosted at: https://thawing-earth-03793.herokuapp.com/
+A live version of this Server is hosted here: https://eager-northcutt-ae83d1.netlify.app/graphql
 
-The Express Server for REST is hosted at: https://calm-escarpment-72991.herokuapp.com/
+To start this locally, run the following commands:
+
+```
+npm install
+npm start
+```
