@@ -8,7 +8,7 @@ import {
 } from '@apollo/client'
 
 //export const apolloURI = 'http://localhost:5000/'
-export const apolloURI = 'https://thawing-earth-03793.herokuapp.com/'
+export const apolloURI = 'http://44.201.215.137:5000/'
 
 const httpLink = createHttpLink({
   uri: apolloURI,
