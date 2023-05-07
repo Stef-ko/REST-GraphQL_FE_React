@@ -8,7 +8,8 @@ import {
 } from '@apollo/client'
 
 //export const apolloURI = 'http://localhost:5000/'
-export const apolloURI = 'http://44.201.215.137:5000/'
+// export const apolloURI = 'http://44.201.215.137:5000/'
+export const apolloURI = 'https://eager-northcutt-ae83d1.netlify.app/'
 
 const httpLink = createHttpLink({
   uri: apolloURI,
